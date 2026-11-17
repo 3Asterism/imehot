@@ -1,0 +1,40 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# --- macOS ---
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd/
+
+# --- imehot 运行产物（真实数据从不入库）---
+*.log
+*.log.*
+state.db
+state.db-*
+state.db-shm
+state.db-wal
+fingerprint
+backups/
+exports/
+*.local.plist
+
+# --- 编辑器 ---
+.idea/
+.vscode/
+*.swp

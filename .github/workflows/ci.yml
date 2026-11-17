@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: unittest ${{ matrix.python }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-14]
+        python: ["3.9", "3.12", "3.13", "3.14"]
+        exclude:
+          # macOS runner 只跑两个版本，省 CI 额度
+          - os: macos-14
+            python: "3.12"
+          - os: macos-14
+            python: "3.13"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 单元测试
+        env:
+          PYTHONPATH: src
+        run: python -W error::ResourceWarning -m unittest discover -s tests -p "test_*.py" -v
+
+  quality:
+    name: lint & types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 安装工具链
+        run: pip install "ruff>=0.6" "mypy>=1.11"
+      - name: ruff
+        run: ruff check src tests
+      - name: ruff format --check
+        run: ruff format --check src tests
+      - name: mypy --strict
+        run: mypy src

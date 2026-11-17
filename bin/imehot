@@ -1,0 +1,41 @@
+#!/bin/sh
+# 从源码直接运行 imehot，无需 pip install。
+#
+# 解释器按优先级挑选：显式 $IMEHOT_PYTHON > 本项目安装的 3.14 > $PYTHON >
+# PATH 上的 python3 > /usr/bin/python3。任何低于 3.9 的解释器都会被拒绝，
+# 而不是让它跑到一半再报语法错误。
+set -eu
+
+here=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+root=$(dirname -- "$here")
+
+PYTHONPATH="$root/src${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPATH
+
+MIN_MAJOR=3
+MIN_MINOR=9
+
+check_and_run() {
+    # $1 = 候选解释器；其余是传给 imehot 的参数
+    py="$1"
+    shift
+    [ -x "$py" ] || return 1
+    "$py" -c "import sys;sys.exit(0 if sys.version_info[:2] >= ($MIN_MAJOR,$MIN_MINOR) else 1)" 2>/dev/null || return 1
+    exec "$py" -m imehot "$@"
+}
+
+for candidate in \
+    "${IMEHOT_PYTHON:-}" \
+    "$HOME/.local/python/3.14/bin/python3.14" \
+    "${PYTHON:-}" \
+    "$(command -v python3 2>/dev/null || true)" \
+    /usr/bin/python3
+do
+    [ -n "$candidate" ] || continue
+    check_and_run "$candidate" "$@" && exit 0 || true
+done
+
+echo "imehot: 找不到 Python >= ${MIN_MAJOR}.${MIN_MINOR} 的解释器。" >&2
+echo "  装一个：https://www.python.org/downloads/" >&2
+echo "  或用 IMEHOT_PYTHON=/path/to/python3 指定。" >&2
+exit 1
