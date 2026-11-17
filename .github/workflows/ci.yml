@@ -9,21 +9,17 @@ on:
 permissions:
   contents: read
 
+# 说明：这套测试是纯 Python（不触碰 macOS 私有 API），所以只跑 ubuntu。
+# 私有仓库的 macOS runner 按 10 倍计费，而它能多验证的东西接近于零。
+
 jobs:
   test:
-    name: unittest ${{ matrix.python }} / ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: unittest ${{ matrix.python }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-14]
         python: ["3.9", "3.12", "3.13", "3.14"]
-        exclude:
-          # macOS runner 只跑两个版本，省 CI 额度
-          - os: macos-14
-            python: "3.12"
-          - os: macos-14
-            python: "3.13"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
