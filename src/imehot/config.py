@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 APP_NAME = "IMEHot"
-BUNDLE_ID = "com.lixiaoxiong.imehot"
+BUNDLE_ID = "io.github.3asterism.imehot"
 
 #: 默认半衰期（天）。参考青简输入法的 90 天冷却与 librime 的指数遗忘。
 DEFAULT_HALF_LIFE_DAYS = 90.0

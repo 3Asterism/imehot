@@ -336,7 +336,7 @@ imehot install
 
 1. 把代码复制到 `~/Library/Application Support/IMEHot/lib`（**不是**指向 `~/Documents`，
    原因见下方踩坑记录）；
-2. 写 `~/Library/LaunchAgents/com.lixiaoxiong.imehot.plist`；
+2. 写 `~/Library/LaunchAgents/io.github.3asterism.imehot.plist`；
 3. `launchctl bootstrap` 立即加载。
 
 `RunAtLoad` 为真，所以**登录时 launchd 会自动加载并立刻跑一次**；之后由
@@ -356,7 +356,7 @@ imehot install
 ### 验证它在工作
 
 ```bash
-launchctl print gui/$(id -u)/com.lixiaoxiong.imehot | grep -E "state|runs|last exit"
+launchctl print gui/$(id -u)/io.github.3asterism.imehot | grep -E "state|runs|last exit"
 imehot status        # 「最近运行」里应该出现新的 watch 记录
 tail -f ~/Library/Application\ Support/IMEHot/imehot.log
 ```
