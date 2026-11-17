@@ -15,11 +15,22 @@ permissions:
 jobs:
   test:
     name: unittest ${{ matrix.python }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.9", "3.12", "3.13", "3.14"]
+        include:
+          # ubuntu-latest 已经是 26.04，那上面没有 Python 3.9 的构建，
+          # 所以单独给它钉一个较老的镜像。3.9 是 macOS 自带 /usr/bin/python3
+          # 的版本，这条必须保证能跑。
+          - python: "3.9"
+            os: ubuntu-24.04
+          - python: "3.12"
+            os: ubuntu-latest
+          - python: "3.13"
+            os: ubuntu-latest
+          - python: "3.14"
+            os: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
