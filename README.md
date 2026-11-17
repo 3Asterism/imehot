@@ -1,5 +1,9 @@
 # imehot
 
+[![CI](https://github.com/3Asterism/imehot/actions/workflows/ci.yml/badge.svg)](https://github.com/3Asterism/imehot/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.9%20%7C%203.14-blue.svg)](#环境要求)
+
 > 低侵入、零常驻的「热词保管员」——观测 macOS 原生拼音输入法自己的学习结果，
 > 维护一份可查询、可导出、可衰减的账本。
 
